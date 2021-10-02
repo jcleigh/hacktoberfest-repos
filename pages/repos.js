@@ -4,7 +4,15 @@ export default function Repos({ repos }) {
             <div>Repos</div>
             {repos && repos.data && repos.data.items ?
                 repos.data.items.map((item, i) =>
-                    <div key={`repo-${i}`}>{item.url}</div>) : null}
+                    <div key={`repo-${i}`}>
+                        <ul>
+                            <li key={`li-${item.full_name}`}>
+                                <a href={item.html_url}>{item.full_name}</a> | Stars: {parseInt(item.stargazers_count).toLocaleString('en-US')} | Watchers: {parseInt(item.watchers_count).toLocaleString('en-US')}
+                                <p style={{color: '#888', paddingLeft: '10px'}}>{item.description}</p>
+                                
+                            </li>
+                        </ul>
+                    </div>) : null}
         </>
     );
 }
@@ -12,6 +20,5 @@ export default function Repos({ repos }) {
 export async function getServerSideProps() {
     const res = await fetch('http://localhost:3000/api/github');
     const repos = await res.json();
-    console.log(repos);
     return { props: { repos } };
 }
